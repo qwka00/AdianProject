@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mini Farm Simulator | Developed by Adian Al-Hassan</title>
+
+  <style>
+    :root {
+      --green-dark: #14532d;
+      --green-main: #16a34a;
+      --green-soft: #dcfce7;
+      --green-light: #f0fdf4;
+      --orange: #f59e0b;
+      --red: #dc2626;
+      --gray-dark: #1f2937;
+      --gray: #6b7280;
+      --gray-light: #f3f4f6;
+      --white: #ffffff;
+      --shadow: 0 16px 40px rgba(20, 83, 45, 0.12);
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f8faf7;
+      color: var(--gray-dark);
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .nav-inner {
+      max-width: 1180px;
+      margin: auto;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      color: var(--green-dark);
+      font-size: 20px;
+    }
+
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--green-main), var(--green-dark));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 900;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      font-size: 14px;
+      color: var(--gray);
+    }
+
+    .nav-links a:hover {
+      color: var(--green-main);
+    }
+
+    .hero {
+      background:
+        radial-gradient(circle at top left, rgba(34, 197, 94, 0.25), transparent 35%),
+        linear-gradient(135deg, #ecfdf5, #ffffff);
+      padding: 85px 20px 60px;
+    }
+
+    .hero-inner {
+      max-width: 1180px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--green-soft);
+      color: var(--green-dark);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      font-size: clamp(38px, 5vw, 66px);
+      line-height: 1.05;
+      color: var(--green-dark);
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      color: var(--gray);
+      font-size: 18px;
+      max-width: 650px;
+      margin-bottom: 28px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      cursor: pointer;
+      padding: 14px 22px;
+      border-radius: 14px;
+      font-weight: 800;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 15px;
+    }
+
+    .btn-primary {
+      background: var(--green-main);
+      color: white;
+      box-shadow: 0 12px 26px rgba(22, 163, 74, 0.25);
+    }
+
+    .btn-primary:hover {
+      background: var(--green-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--green-dark);
+      border: 1px solid #bbf7d0;
+    }
+
+    .btn-secondary:hover {
+      background: var(--green-soft);
+    }
+
+    .hero-panel {
+      background: white;
+      padding: 28px;
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      border: 1px solid #e5e7eb;
+    }
+
+    .mini-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .mini-stat {
+      background: var(--green-light);
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid #bbf7d0;
+    }
+
+    .mini-stat strong {
+      font-size: 26px;
+      color: var(--green-dark);
+      display: block;
+    }
+
+    .mini-stat span {
+      color: var(--gray);
+      font-size: 13px;
+    }
+
+    section {
+      padding: 70px 20px;
+    }
+
+    .section-inner {
+      max-width: 1180px;
+      margin: auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 38px;
+    }
+
+    .section-title h2 {
+      color: var(--green-dark);
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    .section-title p {
+      color: var(--gray);
+      max-width: 720px;
+      margin: auto;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .info-card {
+      background: white;
+      padding: 24px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid #e5e7eb;
+    }
+
+    .info-card .icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 16px;
+      background: var(--green-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      font-size: 25px;
+    }
+
+    .info-card h3 {
+      color: var(--green-dark);
+      margin-bottom: 8px;
+    }
+
+    .info-card p {
+      color: var(--gray);
+      font-size: 14px;
+    }
+
+    .simulator-wrap {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 25px;
+      align-items: start;
+    }
+
+    .panel {
+      background: white;
+      padding: 28px;
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      border: 1px solid #e5e7eb;
+    }
+
+    .panel h3 {
+      color: var(--green-dark);
+      font-size: 24px;
+      margin-bottom: 18px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-weight: 800;
+      font-size: 14px;
+      color: #374151;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 14px;
+      outline: none;
+      font-size: 15px;
+      background: white;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--green-main);
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.12);
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: 1fr 0.6fr;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .error {
+      display: none;
+      margin-top: 14px;
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      padding: 12px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .results-empty {
+      background: var(--gray-light);
+      padding: 26px;
+      border-radius: 20px;
+      color: var(--gray);
+      text-align: center;
+      border: 1px dashed #cbd5e1;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .result-card {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      padding: 16px;
+      animation: fadeUp 0.35s ease both;
+    }
+
+    .result-card span {
+      color: var(--gray);
+      font-size: 13px;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .result-card strong {
+      color: var(--green-dark);
+      font-size: 22px;
+    }
+
+    .risk-low {
+      color: var(--green-main) !important;
+    }
+
+    .risk-medium {
+      color: var(--orange) !important;
+    }
+
+    .risk-high {
+      color: var(--red) !important;
+    }
+
+    .progress-area {
+      margin-top: 20px;
+      background: #f9fafb;
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 16px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      transition: width 0.6s ease;
+      background: var(--green-main);
+    }
+
+    .recommendation {
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 18px;
+      background: var(--green-light);
+      border-left: 6px solid var(--green-main);
+      color: #14532d;
+      font-weight: 700;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+    }
+
+    .price-card {
+      background: white;
+      padding: 28px;
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      border: 1px solid #e5e7eb;
+    }
+
+    .price-card.featured {
+      border: 2px solid var(--green-main);
+      transform: translateY(-8px);
+    }
+
+    .price {
+      font-size: 38px;
+      font-weight: 900;
+      color: var(--green-dark);
+      margin: 12px 0;
+    }
+
+    .price-card ul {
+      list-style: none;
+      margin-top: 18px;
+    }
+
+    .price-card li {
+      margin: 10px 0;
+      color: var(--gray);
+    }
+
+    .formula-box {
+      background: white;
+      padding: 28px;
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      border: 1px solid #e5e7eb;
+    }
+
+    .formula-box code {
+      display: block;
+      background: #111827;
+      color: #dcfce7;
+      padding: 18px;
+      border-radius: 16px;
+      overflow-x: auto;
+      white-space: pre-line;
+      margin-top: 16px;
+      font-size: 14px;
+    }
+
+    footer {
+      background: #111827;
+      color: white;
+      text-align: center;
+      padding: 28px 20px;
+    }
+
+    footer p {
+      color: #d1d5db;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 950px) {
+      .hero-inner,
+      .simulator-wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .grid-4 {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .nav-links {
+        display: none;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .form-grid,
+      .result-grid,
+      .pricing-grid,
+      .mini-stats,
+      .grid-4,
+      .button-row {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 50px 16px;
+      }
+
+      .hero {
+        padding-top: 55px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <div class="logo">
+        <div class="logo-icon">MF</div>
+        <span>Mini Farm Simulator</span>
+      </div>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#problem">Problem</a>
+        <a href="#simulator">Simulator</a>
+        <a href="#pricing">Subscription</a>
+        <a href="#formulas">Formulas</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <div>
+        <span class="badge">Smart Agriculture MVP</span>
+        <h1>Mini Farm Simulator</h1>
+        <p>
+          Instead of losing the season, see the results before you plant.
+          Predict crop yield, water needs, success rate, and risk level using a simple simulation engine.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#simulator">Start Simulation</a>
+          <a class="btn btn-secondary" href="#formulas">View Formulas</a>
+        </div>
+      </div>
+
+      <div class="hero-panel">
+        <h3 style="color:#14532d; margin-bottom:18px;">What the tool predicts</h3>
+        <div class="mini-stats">
+          <div class="mini-stat">
+            <strong>Yield</strong>
+            <span>Expected production in kg</span>
+          </div>
+          <div class="mini-stat">
+            <strong>Water</strong>
+            <span>Required vs provided</span>
+          </div>
+          <div class="mini-stat">
+            <strong>Risk</strong>
+            <span>Low, medium, or high</span>
+          </div>
+          <div class="mini-stat">
+            <strong>Success</strong>
+            <span>Calculated success rate</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section id="about">
+    <div class="section-inner">
+      <div class="section-title">
+        <h2>About the Idea</h2>
+        <p>
+          Mini Farm Simulator helps farmers test their farm conditions before planting.
+          The tool gives fast results using clear inputs such as crop type, area, water, soil, salinity, and temperature.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="problem" style="background:#ffffff;">
+    <div class="section-inner">
+      <div class="section-title">
+        <h2>The Farming Problem</h2>
+        <p>
+          Many losses happen because the farmer starts planting without checking the main risk factors first.
+        </p>
+      </div>
+
+      <div class="grid-4">
+        <div class="info-card">
+          <div class="icon">🌾</div>
+          <h3>Wrong Crop</h3>
+          <p>Some crops are not suitable for the available water, soil, or temperature.</p>
+        </div>
+        <div class="info-card">
+          <div class="icon">💧</div>
+          <h3>Water Shortage</h3>
+          <p>Low water directly reduces expected yield and increases the risk level.</p>
+        </div>
+        <div class="info-card">
+          <div class="icon">🧂</div>
+          <h3>Soil Salinity</h3>
+          <p>High salinity weakens plant growth and lowers the final success rate.</p>
+        </div>
+        <div class="info-card">
+          <div class="icon">🌡️</div>
+          <h3>High Heat</h3>
+          <p>High temperature affects sensitive crops and reduces production quality.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="simulator">
+    <div class="section-inner">
+      <div class="section-title">
+        <h2>Farm Simulation Engine</h2>
+        <p>Enter farm data, then click Simulate. Results are calculated instantly without page reload.</p>
+      </div>
+
+      <div class="simulator-wrap">
+        <div class="panel">
+          <h3>Farm Input Data</h3>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="crop">Crop Type</label>
+              <select id="crop">
+                <option value="wheat">Wheat</option>
+                <option value="tomatoes">Tomatoes</option>
+                <option value="olives">Olives</option>
+                <option value="potatoes">Potatoes</option>
+                <option value="cucumbers">Cucumbers</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="unit">Area Unit</label>
+              <select id="unit">
+                <option value="dunam">Dunams</option>
+                <option value="sqm">Square Meters</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="area">Land Area</label>
+              <input id="area" type="number" min="0" step="0.01" placeholder="Example: 10" />
+            </div>
+
+            <div class="form-group">
+              <label for="water">Available Water m³</label>
+              <input id="water" type="number" min="0" step="0.01" placeholder="Example: 5000" />
+            </div>
+
+            <div class="form-group">
+              <label for="soil">Soil Type</label>
+              <select id="soil">
+                <option value="loamy">Loamy</option>
+                <option value="silty">Silty</option>
+                <option value="clay">Clay</option>
+                <option value="sandy">Sandy</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="salinity">Soil Salinity</label>
+              <select id="salinity">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="temperature">Average Temperature °C</label>
+              <input id="temperature" type="number" step="0.1" placeholder="Example: 30" />
+            </div>
+
+            <div class="form-group">
+              <label for="fertilizer">Fertilizer Quality</label>
+              <select id="fertilizer">
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
+            </div>
+
+            <div class="form-group full">
+              <label for="experience">Farmer Experience</label>
+              <select id="experience">
+                <option value="expert">Expert</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="beginner">Beginner</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="button-row">
+            <button class="btn btn-primary" onclick="simulateFarm()">Simulate</button>
+            <button class="btn btn-secondary" onclick="resetSimulator()">Reset</button>
+          </div>
+
+          <div id="errorBox" class="error"></div>
+        </div>
+
+        <div class="panel">
+          <h3>Simulation Results</h3>
+          <div id="results">
+            <div class="results-empty">
+              Fill the form and click Simulate to display expected production, water status, success rate, and risk level.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing" style="background:#ffffff;">
+    <div class="section-inner">
+      <div class="section-title">
+        <h2>Subscription Model</h2>
+        <p>Monthly subscription model placeholder for future monetization.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="price-card">
+          <h3>Basic Plan</h3>
+          <div class="price">Free</div>
+          <p>For simple farming simulations and quick result checking.</p>
+          <ul>
+            <li>✓ Basic crop simulation</li>
+            <li>✓ Water need calculation</li>
+            <li>✓ Risk level result</li>
+            <li>✓ Success rate</li>
+          </ul>
+        </div>
+
+        <div class="price-card featured">
+          <h3>Pro Plan</h3>
+          <div class="price">$9.99 / month</div>
+          <p>Future advanced plan for farmers who need deeper insights.</p>
+          <ul>
+            <li>✓ Weather prediction</li>
+            <li>✓ Profit estimation</li>
+            <li>✓ Crop history analysis</li>
+            <li>✓ Advanced PDF reports</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="formulas">
+    <div class="section-inner">
+      <div class="section-title">
+        <h2>Mathematical Formulas</h2>
+        <p>The simulator uses fixed and logical formulas. No random values are used.</p>
+      </div>
+
+      <div class="formula-box">
+        <h3 style="color:#14532d;">Simulation Logic</h3>
+        <code>
+Area in Dunams =
+If unit is Square Meters: Area / 1000
+If unit is Dunams: Area
+
+Base Production =
+Crop Base Yield per Dunam × Area in Dunams
+
+Total Water Required =
+Crop Water Need per Dunam × Area in Dunams
+
+Water Factor =
+Available Water / Total Water Required
+Maximum value = 1
+Minimum value = 0
+
+Temperature Factor =
+If Average Temperature ≤ Ideal Temperature:
+Temperature Factor = 1
+
+If Average Temperature > Ideal Temperature:
+Temperature Difference = Average Temperature - Ideal Temperature
+Temperature Factor = 1 - (Temperature Difference × 0.02 × Heat Sensitivity)
+Minimum Temperature Factor = 0.50
+
+Expected Production =
+Base Production × Water Factor × Soil Factor × Salinity Factor × Fertilizer Factor × Farmer Experience Factor × Temperature Factor
+
+Success Rate =
+Water Factor × Soil Factor × Salinity Factor × Fertilizer Factor × Farmer Experience Factor × Temperature Factor × 100
+
+Risk Level =
+Low if Success Rate ≥ 75%
+Medium if Success Rate is from 50% to less than 75%
+High if Success Rate &lt; 50%
+        </code>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <strong>Mini Farm Simulator</strong>
+    <p>Developed by Adian Al-Hassan.</p>
+  </footer>
+
+  <script>
+    const cropData = {
+      wheat: {
+        name: "Wheat",
+        baseYieldPerDunam: 500,
+        waterNeedPerDunam: 450,
+        idealTemperature: 25,
+        heatSensitivity: 0.8
+      },
+      tomatoes: {
+        name: "Tomatoes",
+        baseYieldPerDunam: 4000,
+        waterNeedPerDunam: 700,
+        idealTemperature: 28,
+        heatSensitivity: 1.2
+      },
+      olives: {
+        name: "Olives",
+        baseYieldPerDunam: 800,
+        waterNeedPerDunam: 350,
+        idealTemperature: 32,
+        heatSensitivity: 0.5
+      },
+      potatoes: {
+        name: "Potatoes",
+        baseYieldPerDunam: 3000,
+        waterNeedPerDunam: 600,
+        idealTemperature: 22,
+        heatSensitivity: 1.0
+      },
+      cucumbers: {
+        name: "Cucumbers",
+        baseYieldPerDunam: 3500,
+        waterNeedPerDunam: 750,
+        idealTemperature: 27,
+        heatSensitivity: 1.1
+      }
+    };
+
+    const soilFactors = {
+      loamy: 1.00,
+      silty: 0.95,
+      clay: 0.90,
+      sandy: 0.80
+    };
+
+    const salinityFactors = {
+      low: 1.00,
+      medium: 0.85,
+      high: 0.65
+    };
+
+    const fertilizerFactors = {
+      high: 1.00,
+      medium: 0.90,
+      low: 0.75
+    };
+
+    const experienceFactors = {
+      expert: 1.00,
+      intermediate: 0.90,
+      beginner: 0.80
+    };
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function formatNumber(value) {
+      return Number(value).toLocaleString(undefined, {
+        maximumFractionDigits: 2
+      });
+    }
+
+    function showError(message) {
+      const errorBox = document.getElementById("errorBox");
+      errorBox.style.display = "block";
+      errorBox.textContent = message;
+    }
+
+    function hideError() {
+      const errorBox = document.getElementById("errorBox");
+      errorBox.style.display = "none";
+      errorBox.textContent = "";
+    }
+
+    function simulateFarm() {
+      hideError();
+
+      const cropKey = document.getElementById("crop").value;
+      const unit = document.getElementById("unit").value;
+      const area = Number(document.getElementById("area").value);
+      const availableWater = Number(document.getElementById("water").value);
+      const soil = document.getElementById("soil").value;
+      const salinity = document.getElementById("salinity").value;
+      const temperature = Number(document.getElementById("temperature").value);
+      const fertilizer = document.getElementById("fertilizer").value;
+      const experience = document.getElementById("experience").value;
+
+      if (!area || area <= 0) {
+        showError("Please enter a valid land area greater than 0.");
+        return;
+      }
+
+      if (availableWater < 0 || document.getElementById("water").value === "") {
+        showError("Please enter a valid available water quantity. Negative values are not allowed.");
+        return;
+      }
+
+      if (document.getElementById("temperature").value === "") {
+        showError("Please enter the average temperature.");
+        return;
+      }
+
+      const selectedCrop = cropData[cropKey];
+
+      const areaInDunams = unit === "sqm" ? area / 1000 : area;
+
+      const baseProduction = selectedCrop.baseYieldPerDunam * areaInDunams;
+      const totalWaterRequired = selectedCrop.waterNeedPerDunam * areaInDunams;
+
+      let waterFactor = totalWaterRequired === 0 ? 0 : availableWater / totalWaterRequired;
+      waterFactor = clamp(waterFactor, 0, 1);
+
+      let temperatureFactor = 1;
+      if (temperature > selectedCrop.idealTemperature) {
+        const temperatureDifference = temperature - selectedCrop.idealTemperature;
+        temperatureFactor = 1 - (temperatureDifference * 0.02 * selectedCrop.heatSensitivity);
+        temperatureFactor = Math.max(temperatureFactor, 0.5);
+      }
+
+      const soilFactor = soilFactors[soil];
+      const salinityFactor = salinityFactors[salinity];
+      const fertilizerFactor = fertilizerFactors[fertilizer];
+      const experienceFactor = experienceFactors[experience];
+
+      const expectedProduction =
+        baseProduction *
+        waterFactor *
+        soilFactor *
+        salinityFactor *
+        fertilizerFactor *
+        experienceFactor *
+        temperatureFactor;
+
+      let successRate =
+        waterFactor *
+        soilFactor *
+        salinityFactor *
+        fertilizerFactor *
+        experienceFactor *
+        temperatureFactor *
+        100;
+
+      successRate = clamp(successRate, 0, 100);
+
+      const waterDifference = availableWater - totalWaterRequired;
+      const waterStatus = waterDifference >= 0
+        ? `Water supply is enough. Surplus: ${formatNumber(waterDifference)} m³`
+        : `Water shortage detected. Deficit: ${formatNumber(Math.abs(waterDifference))} m³`;
+
+      let riskLevel = "Low";
+      let riskClass = "risk-low";
+      let progressColor = "#16a34a";
+      let recommendation = "The planting conditions look suitable. The farmer can proceed with good confidence.";
+
+      if (successRate < 50) {
+        riskLevel = "High";
+        riskClass = "risk-high";
+        progressColor = "#dc2626";
+        recommendation = "The planting conditions are risky. The farmer should not start planting before improving the main weak factors.";
+      } else if (successRate < 75) {
+        riskLevel = "Medium";
+        riskClass = "risk-medium";
+        progressColor = "#f59e0b";
+        recommendation = "The planting conditions are acceptable but need improvement. Check water, soil, salinity, and fertilizer before planting.";
+      }
+
+      const bestAction = getBestAction({
+        waterFactor,
+        salinity,
+        soil,
+        fertilizer,
+        experience,
+        temperature,
+        idealTemperature: selectedCrop.idealTemperature
+      });
+
+      document.getElementById("results").innerHTML = `
+        <div class="result-grid">
+          <div class="result-card">
+            <span>Expected Production</span>
+            <strong>${formatNumber(expectedProduction)} kg</strong>
+          </div>
+
+          <div class="result-card">
+            <span>Base Production</span>
+            <strong>${formatNumber(baseProduction)} kg</strong>
+          </div>
+
+          <div class="result-card">
+            <span>Total Water Required</span>
+            <strong>${formatNumber(totalWaterRequired)} m³</strong>
+          </div>
+
+          <div class="result-card">
+            <span>Available Water</span>
+            <strong>${formatNumber(availableWater)} m³</strong>
+          </div>
+
+          <div class="result-card">
+            <span>Water Status</span>
+            <strong style="font-size:16px;">${waterStatus}</strong>
+          </div>
+
+          <div class="result-card">
+            <span>Risk Level</span>
+            <strong class="${riskClass}">${riskLevel}</strong>
+          </div>
+        </div>
+
+        <div class="progress-area">
+          <div class="progress-header">
+            <span>Success Rate</span>
+            <span>${successRate.toFixed(1)}%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width:${successRate}%; background:${progressColor};"></div>
+          </div>
+        </div>
+
+        <div class="recommendation">
+          <p>${recommendation}</p>
+          <p style="margin-top:8px;"><strong>Best Action:</strong> ${bestAction}</p>
+        </div>
+      `;
+    }
+
+    function getBestAction(data) {
+      if (data.waterFactor < 0.75) {
+        return "Increase the available water or choose a crop with lower water requirements.";
+      }
+
+      if (data.salinity === "high") {
+        return "Reduce soil salinity or select a more tolerant crop before planting.";
+      }
+
+      if (data.soil === "sandy") {
+        return "Improve soil water retention by adding organic matter or using better irrigation planning.";
+      }
+
+      if (data.fertilizer === "low") {
+        return "Improve fertilizer quality to support better plant growth.";
+      }
+
+      if (data.experience === "beginner") {
+        return "Use expert guidance or follow a simple crop management plan during the season.";
+      }
+
+      if (data.temperature > data.idealTemperature + 5) {
+        return "Consider planting in a cooler period or using heat protection methods.";
+      }
+
+      return "Current conditions are good. Keep monitoring water, temperature, and soil status.";
+    }
+
+    function resetSimulator() {
+      hideError();
+
+      document.getElementById("crop").value = "wheat";
+      document.getElementById("unit").value = "dunam";
+      document.getElementById("area").value = "";
+      document.getElementById("water").value = "";
+      document.getElementById("soil").value = "loamy";
+      document.getElementById("salinity").value = "low";
+      document.getElementById("temperature").value = "";
+      document.getElementById("fertilizer").value = "high";
+      document.getElementById("experience").value = "expert";
+
+      document.getElementById("results").innerHTML = `
+        <div class="results-empty">
+          Fill the form and click Simulate to display expected production, water status, success rate, and risk level.
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
